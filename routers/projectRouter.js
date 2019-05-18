@@ -6,8 +6,11 @@ const router = express.Router();
 router.get('/:id', async (req, res) => {
     try {
         const id = await PROJECT_DB.get(req.params.id);
-        if(id) {
+        const actions = await PROJECT_DB.getProjectActions(req.params.id);
+        if(id && !actions) {
             res.status(200).json(id);
+        } else if(id && actions) {
+            res.status(200).json({ id, actions });
         } else {
             res.status(404).json({ message: 'Could not locate project with that ID' });
         }
@@ -16,6 +19,20 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({ message: 'Error retrieving the project with that ID' });
     }
 });
+
+// router.get('/:id', async (req, res) => {
+//     try {
+//         const id = await PROJECT_DB.getProjectActions(req.params.id);
+//         if(id) {
+//             res.status(200).json(id);
+//         } else {
+//             res.status(404).json({ message: 'Could not locate actions for that project' });
+//         }
+//     } catch(err) {
+//         console.log(err);
+//         res.status(500).json({ message: 'Error retrieving actions for that project' });
+//     }
+// });
 
 router.post('/', async (req, res) => {
     try {
