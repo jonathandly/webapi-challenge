@@ -17,7 +17,16 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// router.post();
+router.post('/', async (req, res) => {
+    try {
+        const proj = {...req.body};
+        const newProj = await PROJECT_DB.insert(proj);
+        res.status(201).json(newProj);
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ message: 'Error adding project' });
+    }
+});
 
 // router.put();
 
