@@ -38,6 +38,18 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// router.delete();
+router.delete('/:id', async (req, res) => {
+    try {
+        const deleted = await ACTION_DB.remove(req.params.id);
+        if(!deleted) {
+            res.status(400).json({ message: 'Could not delete resource with that ID' });
+        } else {
+            res.status(200).json({ message: 'Action successfully removed' });
+        }
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ message: 'Error deleting resource' });
+    }
+});
 
 module.exports = router;
