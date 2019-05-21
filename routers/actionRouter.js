@@ -13,6 +13,23 @@ router.get('/', async (req, res) => {
     }
 });
 
+// GET by ID all actions
+router.get('/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const action = await ACTION_DB.get(id);
+        if(action) {
+            res.status(200).json(action);
+        } else {
+            res.status(404).json({ message: 'Unable to locate action with that ID' });
+        }
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ message: 'Error finding action with that ID' });
+    }
+})
+// Post with check for ID
+
 router.post('/', async (req, res) => {
     try {
         const action = await ACTION_DB.insert(req.body);
